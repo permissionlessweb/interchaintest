@@ -58,7 +58,7 @@ func SetVolumeOwner(ctx context.Context, opts VolumeOwnerOptions) error {
 		},
 		&container.HostConfig{
 			Binds:      []string{opts.VolumeName + ":" + mountPath},
-			AutoRemove: true,
+			AutoRemove: false,
 		},
 		nil, // No networking necessary.
 		nil,

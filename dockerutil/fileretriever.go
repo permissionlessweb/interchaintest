@@ -51,7 +51,7 @@ func (r *FileRetriever) SingleFileContent(ctx context.Context, volumeName, relPa
 		},
 		&container.HostConfig{
 			Binds:      []string{volumeName + ":" + mountPath},
-			AutoRemove: true,
+			AutoRemove: false,
 		},
 		nil, // No networking necessary.
 		nil,
