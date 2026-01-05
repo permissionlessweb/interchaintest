@@ -1249,7 +1249,6 @@ func (tn *ChainNode) StartContainer(ctx context.Context) error {
 		return err
 	}
 
-	time.Sleep(5 * time.Second)
 	return retry.Do(func() error {
 		stat, err := tn.Client.Status(ctx)
 		if err != nil {
@@ -1261,7 +1260,7 @@ func (tn *ChainNode) StartContainer(ctx context.Context) error {
 				stat.SyncInfo.LatestBlockHeight, stat.SyncInfo.CatchingUp)
 		}
 		return nil
-	}, retry.Context(ctx), retry.Attempts(40), retry.Delay(3*time.Second), retry.DelayType(retry.FixedDelay))
+	}, retry.Context(ctx), retry.Attempts(1000), retry.Delay(250*time.Millisecond), retry.DelayType(retry.FixedDelay))
 }
 
 func (tn *ChainNode) PauseContainer(ctx context.Context) error {

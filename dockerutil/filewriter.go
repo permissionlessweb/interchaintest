@@ -59,7 +59,7 @@ func (w *FileWriter) WriteFile(ctx context.Context, volumeName, relPath string, 
 		},
 		&container.HostConfig{
 			Binds:      []string{volumeName + ":" + mountPath},
-			AutoRemove: true,
+			AutoRemove: false, // with newer docker versions, having `true` would delete the container too early.
 		},
 		nil, // No networking necessary.
 		nil,

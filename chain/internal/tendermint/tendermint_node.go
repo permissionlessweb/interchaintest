@@ -298,7 +298,6 @@ func (tn *TendermintNode) StartContainer(ctx context.Context) error {
 		return err
 	}
 
-	time.Sleep(5 * time.Second)
 	return retry.Do(func() error {
 		stat, err := tn.Client.Status(ctx)
 		if err != nil {

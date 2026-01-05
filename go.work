@@ -1,8 +1,10 @@
-go 1.22.5
+go 1.22.11
 
-toolchain go1.23.0
+toolchain go1.24.10
 
 use (
 	.
 	./local-interchain
 )
+
+replace github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.38.19
