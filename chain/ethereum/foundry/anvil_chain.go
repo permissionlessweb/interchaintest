@@ -10,6 +10,7 @@ import (
 	"strings"
 	"sync"
 
+	"cosmossdk.io/math"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"go.uber.org/zap"
@@ -162,6 +163,13 @@ func (c *AnvilChain) GetAddress(ctx context.Context, keyName string) ([]byte, er
 
 func (c *AnvilChain) SendFunds(ctx context.Context, keyName string, amount ibc.WalletAmount) error {
 	_, err := c.SendFundsWithNote(ctx, keyName, amount, "")
+	return err
+}
+
+func (c *AnvilChain) SetNativeBalance(ctx context.Context, addr string, wei math.Int) error {
+	hexBalance := "0x" + wei.BigInt().Text(16)
+	cmd := []string{"cast", "rpc", "anvil_setBalance", addr, hexBalance, "--rpc-url", c.GetRPCAddress()}
+	_, _, err := c.Exec(ctx, cmd, nil)
 	return err
 }
 
