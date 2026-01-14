@@ -9,6 +9,7 @@ import (
 	"io"
 	"math"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -957,8 +958,24 @@ func (c *CosmosChain) Start(testName string, ctx context.Context, additionalGene
 		}
 	}
 
-	for _, wallet := range additionalGenesisWallets {
-		if err := validator0.AddGenesisAccount(ctx, wallet.Address, []sdk.Coin{{Denom: wallet.Denom, Amount: wallet.Amount}}); err != nil {
+	byAddr := make(map[string][]sdk.Coin)
+	for _, w := range additionalGenesisWallets {
+		byAddr[w.Address] = append(byAddr[w.Address], sdk.Coin{
+			Denom:  w.Denom,
+			Amount: w.Amount,
+		})
+	}
+	addrs := make([]string, 0, len(byAddr))
+	for addr := range byAddr {
+		addrs = append(addrs, addr)
+	}
+	sort.Strings(addrs)
+
+	for _, addr := range addrs {
+		coins := byAddr[addr]
+		sort.Slice(coins, func(i, j int) bool { return coins[i].Denom < coins[j].Denom })
+
+		if err := validator0.AddGenesisAccount(ctx, addr, coins); err != nil {
 			return err
 		}
 	}
